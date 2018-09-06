@@ -160,6 +160,7 @@ class TestWebdavInfoEndpoint(FunctionalTest):
     """
     Tests for /api/v2/system/webdav
     """
+    config_section = 'webdav_functional_test'
 
     def test_api__get_webdav_info__ok_200__nominal_case(self):
         """
@@ -174,9 +175,9 @@ class TestWebdavInfoEndpoint(FunctionalTest):
         )
         res = self.testapp.get('/api/v2/system/webdav', status=200)
         webdav = res.json_body
-        assert webdav['encrypted'] is False
-        assert webdav['client_base_url'] == 'localhost:3030/'
         assert webdav['activated'] is True
+        assert webdav['client_base_url'] == 'localhost:3030/'
+        assert webdav['encrypted'] is False
 
     def test_api__get_content_types__err_401__unregistered_user(self):
         """
