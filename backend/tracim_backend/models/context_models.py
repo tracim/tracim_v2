@@ -25,11 +25,23 @@ from tracim_backend.app_models.workspace_menu_entries import WorkspaceMenuEntry
 from tracim_backend.app_models.contents import CONTENT_TYPES
 
 
+class WebdavInfo(object):
+    def __init__(
+            self,
+            activated: bool,
+            client_base_url: str,
+            encrypted: bool,
+    ) -> None:
+        self.activated = activated
+        self.client_base_url = client_base_url
+        self.encrypted = encrypted
+
+
 class PreviewAllowedDim(object):
 
     def __init__(
             self,
-            restricted:bool,
+            restricted: bool,
             dimensions: typing.List[PreviewDim]
     ) -> None:
         self.restricted = restricted

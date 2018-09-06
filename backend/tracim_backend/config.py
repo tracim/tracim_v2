@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+import imp
 import json
 from urllib.parse import urlparse
 
@@ -376,39 +377,46 @@ class CFG(object):
         ###
 
         # TODO - G.M - 27-03-2018 - [WebDav] Restore wsgidav config
-        #self.WSGIDAV_CONFIG_PATH = settings.get(
-        #    'wsgidav.config_path',
-        #    'wsgidav.conf',
-        #)
+        self.WSGIDAV_CONFIG_PATH = settings.get(
+           'wsgidav.config_path',
+           'wsgidav.conf',
+        )
         # TODO: Convert to importlib
         # http://stackoverflow.com/questions/41063938/use-importlib-instead-imp-for-non-py-file
-        #self.wsgidav_config = imp.load_source(
-        #    'wsgidav_config',
-        #    self.WSGIDAV_CONFIG_PATH,
-        #)
-        # self.WSGIDAV_PORT = self.wsgidav_config.port
-        # self.WSGIDAV_CLIENT_BASE_URL = settings.get(
-        #     'wsgidav.client.base_url',
-        #     None,
-        # )
-        #
-        # if not self.WSGIDAV_CLIENT_BASE_URL:
-        #     self.WSGIDAV_CLIENT_BASE_URL = \
-        #         '{0}:{1}'.format(
-        #             self.WEBSITE_SERVER_NAME,
-        #             self.WSGIDAV_PORT,
-        #         )
-        #     logger.warning(self,
-        #         'NOTE: Generated wsgidav.client.base_url parameter with '
-        #         'followings parameters: website.server_name and '
-        #         'wsgidav.conf port'.format(
-        #             self.WSGIDAV_CLIENT_BASE_URL,
-        #         )
-        #     )
-        #
-        # if not self.WSGIDAV_CLIENT_BASE_URL.endswith('/'):
-        #     self.WSGIDAV_CLIENT_BASE_URL += '/'
+        self.WSGIDAV_ACTIVATED = asbool(settings.get(
+            'wsgidav.activated',
+            True
+        ))
+        self.wsgidav_config = imp.load_source(
+           'wsgidav_config',
+           self.WSGIDAV_CONFIG_PATH,
+        )
+        self.WSGIDAV_PORT = self.wsgidav_config.port
+        self.WSGIDAV_CLIENT_BASE_URL = settings.get(
+            'wsgidav.client.base_url',
+            None,
+        )
 
+        if not self.WSGIDAV_CLIENT_BASE_URL:
+            self.WSGIDAV_CLIENT_BASE_URL = \
+                '{0}:{1}'.format(
+                    self.WEBSITE_SERVER_NAME,
+                    self.WSGIDAV_PORT,
+                )
+            logger.warning(self,
+                'NOTE: Generated wsgidav.client.base_url parameter with '
+                'followings parameters: website.server_name and '
+                'wsgidav.conf port'.format(
+                    self.WSGIDAV_CLIENT_BASE_URL,
+                )
+            )
+
+        if not self.WSGIDAV_CLIENT_BASE_URL.endswith('/'):
+            self.WSGIDAV_CLIENT_BASE_URL += '/'
+
+        self.WSGIDAV_CLIENT_ENCRYPTED = asbool(settings.get(
+            'wsgidav.client.encrypted', False
+        ))
         # TODO - G.M - 27-03-2018 - [Caldav] Restore radicale config
         ###
         # RADICALE (Caldav server)
