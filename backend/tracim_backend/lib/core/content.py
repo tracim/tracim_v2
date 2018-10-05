@@ -1446,8 +1446,20 @@ class ContentApi(object):
             new_filename,
             new_mimetype,
         )
+        self.generate_intermediate_pdf_preview(item)
         item.revision_type = ActionDescription.REVISION
         return item
+
+    def generate_intermediate_pdf_preview(self, content: Content):
+        """
+        pre-generate intermediate pdf preview if needed
+        :param content:
+        :return:
+        """
+        depot = DepotManager.get()
+        depot_stored_file = depot.get(content.depot_file)  # type: StoredFile
+        depot_file_path = depot_stored_file._file_path  # type: str
+        self.preview_manager.get_page_nb(depot_file_path)
 
     def archive(self, content: Content):
         content.owner = self._user
