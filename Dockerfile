@@ -23,3 +23,9 @@ COPY docker/bootstrap.sh /
 WORKDIR /opt/tracim/backend
 VOLUME ["/etc/tracim", "/var/lib/tracim"]
 CMD ["/bin/bash", "/bootstrap.sh"]
+
+# TODO:
+#
+# * all logs in files/stdout
+# * wsgidav/caldav/strong http server
+#
