@@ -100,7 +100,7 @@ function install_npm_and_nodejs {
     else
         logerror "npm not installed"
         log "install npm with nodejs"
-        $SUDO apt install -y curl && loggood "success" || logerror "some error"
+        $SUDO apt install -y curl gnupg && loggood "success" || logerror "some error"
         curl -sL https://deb.nodesource.com/setup_8.x | $SUDOCURL bash -
         $SUDO apt update
         $SUDO apt install -y nodejs && loggood "success" || logerror "some error"
