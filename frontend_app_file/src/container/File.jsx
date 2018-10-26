@@ -510,6 +510,22 @@ class File extends React.Component {
               }
             </div>
 
+            {(appButton => {
+              if (!appButton) return null
+
+              return (
+                <div className='d-flex'>
+                  <button
+                    className='btn highlightBtn'
+                    style={appButton.style}
+                    onClick={appButton.action}
+                  >
+                    {appButton.label}
+                  </button>
+                </div>
+              )
+            })(GLOBAL_customButton.getButton(state.config.slug))}
+
             <div className='d-flex'>
               {state.loggedUser.idRoleUserWorkspace >= 2 &&
                 <SelectStatus
