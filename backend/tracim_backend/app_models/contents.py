@@ -2,13 +2,15 @@
 import typing
 from enum import Enum
 
-from tracim_backend.extensions import app_list
-from tracim_backend.exceptions import ContentTypeNotExist
 from tracim_backend.exceptions import ContentStatusNotExist
-
+from tracim_backend.exceptions import ContentTypeNotExist
+from tracim_backend.extensions import app_list
 ####
 # Content Status
 from tracim_backend.lib.core.application import ApplicationApi
+from tracim_backend.lib.utils.markup_conversion import HTML_MARKUP
+from tracim_backend.lib.utils.markup_conversion import TEXT_MARKUP
+
 if typing.TYPE_CHECKING:
     from tracim_backend.app_models.applications import Application
 
@@ -16,7 +18,6 @@ if typing.TYPE_CHECKING:
 class GlobalStatus(Enum):
     OPEN = 'open'
     CLOSED = 'closed'
-
 
 class ContentStatus(object):
     """
@@ -125,6 +126,7 @@ class ContentType(object):
             slug_alias: typing.List[str] = None,
             allow_sub_content: bool = False,
             file_extension: typing.Optional[str] = None,
+            raw_content_markup: str = HTML_MARKUP
     ):
         self.slug = slug
         self.fa_icon = fa_icon
@@ -135,6 +137,7 @@ class ContentType(object):
         self.slug_alias = slug_alias
         self.allow_sub_content = allow_sub_content
         self.file_extension = file_extension
+        self.raw_content_markup = raw_content_markup
 
 
 THREAD_TYPE = 'thread'
@@ -151,6 +154,7 @@ event_type = ContentType(
     label='Event',
     creation_label='Event',
     available_statuses=content_status_list.get_all(),
+    raw_content_markup=HTML_MARKUP,
 )
 
 # TODO - G.M - 31-05-2018 - Set Better Event params
@@ -161,7 +165,24 @@ comment_type = ContentType(
     label='Comment',
     creation_label='Comment',
     available_statuses=content_status_list.get_all(),
+    raw_content_markup=HTML_MARKUP
 )
+
+
+class ContentMarkupList(object):
+
+    def __init__(self, app_list: typing.List['Application']):
+        self.app_list = app_list
+        self._special_content_markup = [TEXT_MARKUP, HTML_MARKUP]
+
+    def get_all(self):
+        app_api = ApplicationApi(self.app_list)
+        content_types = app_api.get_content_types()
+        markup_list = self._special_content_markup.copy()
+        for content_type in content_types:
+            if content_type.raw_content_markup not in markup_list:
+                markup_list.append(content_type.raw_content_markup)
+        return markup_list
 
 
 class ContentTypeList(object):
@@ -261,3 +282,4 @@ class ContentTypeList(object):
 
 
 content_type_list = ContentTypeList(app_list)
+content_markup_list = ContentMarkupList(app_list)

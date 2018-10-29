@@ -8,16 +8,16 @@ from marshmallow.validate import OneOf
 from marshmallow.validate import Range
 
 from tracim_backend.app_models.contents import GlobalStatus
+from tracim_backend.app_models.contents import content_markup_list
 from tracim_backend.app_models.contents import content_status_list
 from tracim_backend.app_models.contents import content_type_list
 from tracim_backend.app_models.contents import open_status
 from tracim_backend.app_models.validator import all_content_types_validator
+from tracim_backend.lib.utils.markup_conversion import HTML_MARKUP
 from tracim_backend.lib.utils.utils import DATETIME_FORMAT
 from tracim_backend.models.auth import Group
 from tracim_backend.models.auth import Profile
-from tracim_backend.models.context_models import ActiveContentFilter, \
-    WorkspacePath
-from tracim_backend.models.context_models import KnownMemberQuery
+from tracim_backend.models.context_models import ActiveContentFilter
 from tracim_backend.models.context_models import CommentCreation
 from tracim_backend.models.context_models import CommentPath
 from tracim_backend.models.context_models import ContentCreation
@@ -29,6 +29,7 @@ from tracim_backend.models.context_models import FilePreviewSizedPath
 from tracim_backend.models.context_models import FileQuery
 from tracim_backend.models.context_models import FileRevisionPath
 from tracim_backend.models.context_models import FolderContentUpdate
+from tracim_backend.models.context_models import KnownMemberQuery
 from tracim_backend.models.context_models import LoginCredentials
 from tracim_backend.models.context_models import MoveParams
 from tracim_backend.models.context_models import PageQuery
@@ -51,6 +52,7 @@ from tracim_backend.models.context_models import \
     WorkspaceAndContentRevisionPath
 from tracim_backend.models.context_models import WorkspaceAndUserPath
 from tracim_backend.models.context_models import WorkspaceMemberInvitation
+from tracim_backend.models.context_models import WorkspacePath
 from tracim_backend.models.context_models import WorkspaceUpdate
 from tracim_backend.models.data import ActionDescription
 from tracim_backend.models.data import UserRoleInWorkspace
@@ -1031,11 +1033,29 @@ class TextBasedDataAbstractSchema(marshmallow.Schema):
     raw_content = marshmallow.fields.String(
         description='Content of the object, may be raw text or <b>html</b> for example'  # nopep8
     )
+    raw_content_markup = marshmallow.fields.String(
+        description='markup langage of raw content given, '
+                    'this will help tracim to convert content correctly.',
+        example=HTML_MARKUP,
+        required=False,
+        validate=OneOf(content_markup_list.get_all()),
+        default=None,
+        allow_none=True,
+    )
 
 
 class FileInfoAbstractSchema(marshmallow.Schema):
     raw_content = marshmallow.fields.String(
-        description='raw text or html description of the file'
+        description='Content of the object, may be raw text or <b>html</b> for example'  # nopep8
+    )
+    raw_content_markup = marshmallow.fields.String(
+        description='markup langage of raw content given, '
+                    'this will help tracim to convert content correctly.',
+        example=HTML_MARKUP,
+        required=False,
+        validate=OneOf(content_markup_list.get_all()),
+        default=None,
+        allow_none=True,
     )
     page_nb = marshmallow.fields.Int(
         description='number of pages, return null value if unaivalable',
@@ -1124,6 +1144,15 @@ class SetCommentSchema(marshmallow.Schema):
         example='<p>This is just an html comment !</p>',
         validate=Length(min=1),
         required=True,
+    )
+    raw_content_markup = marshmallow.fields.String(
+        description='markup langage of raw content given, '
+                    'this will help tracim to convert content correctly.',
+        example=HTML_MARKUP,
+        required=False,
+        validate=OneOf(content_markup_list.get_all()),
+        default=None,
+        allow_none=True,
     )
 
     @post_load()

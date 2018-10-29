@@ -447,8 +447,10 @@ class CommentCreation(object):
     def __init__(
         self,
         raw_content: str,
+        raw_content_markup: typing.Optional[str] = None,
     ) -> None:
         self.raw_content = raw_content
+        self.raw_content_markup = raw_content_markup
 
 
 class SetContentStatus(object):
@@ -470,9 +472,11 @@ class TextBasedContentUpdate(object):
         self,
         label: str,
         raw_content: str,
+        raw_content_markup: typing.Optional[str] = None
     ) -> None:
         self.label = label
         self.raw_content = raw_content
+        self.raw_content_markup = raw_content_markup
 
 
 class FolderContentUpdate(object):
@@ -484,9 +488,11 @@ class FolderContentUpdate(object):
         label: str,
         raw_content: str,
         sub_content_types: typing.List[str],
+        raw_content_markup: typing.Optional[str] = None,
     ) -> None:
         self.label = label
         self.raw_content = raw_content
+        self.raw_content_markup = raw_content_markup
         self.sub_content_types = sub_content_types
 
 

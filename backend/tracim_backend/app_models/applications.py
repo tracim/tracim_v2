@@ -1,7 +1,9 @@
 # coding=utf-8
 import typing
 
+from tracim_backend.lib.utils.markup_conversion import HTML_MARKUP
 from tracim_backend.app_models.contents import ContentType
+
 if typing.TYPE_CHECKING:
     from tracim_backend.config import CFG
     from tracim_backend.app_models.contents import ContentStatus
@@ -56,6 +58,7 @@ class Application(object):
             slug_alias: typing.List[str] = None,
             allow_sub_content: bool = False,
             file_extension: typing.Optional[str] = None,
+            raw_content_markup: str = HTML_MARKUP
     ):
         content_type = ContentType(
             slug=slug,
@@ -67,6 +70,7 @@ class Application(object):
             slug_alias=slug_alias,
             allow_sub_content=allow_sub_content,
             file_extension=file_extension,
+            raw_content_markup=raw_content_markup
         )
         self.content_types.append(content_type)
 

@@ -1,14 +1,18 @@
 # -*- coding: utf-8 -*-
 import transaction
+
+from tracim_backend import error
+from tracim_backend import models
+from tracim_backend.app_models.contents import content_markup_list
 from tracim_backend.app_models.contents import content_type_list
+from tracim_backend.fixtures.content import Content as ContentFixtures
+from tracim_backend.fixtures.users_and_groups import Base as BaseFixture
 from tracim_backend.lib.core.content import ContentApi
 from tracim_backend.lib.core.workspace import WorkspaceApi
+from tracim_backend.lib.utils.markup_conversion import TEXT_MARKUP
 from tracim_backend.models import get_tm_session
 from tracim_backend.models.revision_protection import new_revision
 from tracim_backend.tests import FunctionalTest
-from tracim_backend import error, models
-from tracim_backend.fixtures.content import Content as ContentFixtures
-from tracim_backend.fixtures.users_and_groups import Base as BaseFixture
 
 
 class TestCommentsEndpoint(FunctionalTest):
@@ -113,7 +117,7 @@ class TestCommentsEndpoint(FunctionalTest):
             )
         )
         params = {
-            'raw_content': 'I strongly disagree, Tiramisu win!'
+            'raw_content': 'I strongly disagree,\n Tiramisu win!'
         }
         res = self.testapp.post_json(
             '/api/v2/workspaces/{}/contents/{}/comments'.format(
@@ -126,7 +130,77 @@ class TestCommentsEndpoint(FunctionalTest):
         comment = res.json_body
         assert comment['content_id']
         assert comment['parent_id'] == test_thread.content_id
-        assert comment['raw_content'] == 'I strongly disagree, Tiramisu win!'
+        assert comment['raw_content'] == 'I strongly disagree,\n Tiramisu win!'
+        assert comment['author']
+        assert comment['author']['user_id'] == admin.user_id
+        # TODO - G.M - 2018-06-172 - [avatar] setup avatar url
+        assert comment['author']['avatar_url'] is None
+        assert comment['author']['public_name'] == admin.display_name
+        # TODO - G.M - 2018-06-179 - better check for datetime
+        assert comment['created']
+
+    def test_api__post_content_comment__ok_200__markup_is_text(self) -> None:
+        """
+        Get alls comments of a content
+        """
+        dbsession = get_tm_session(self.session_factory, transaction.manager)
+        admin = dbsession.query(models.User) \
+            .filter(models.User.email == 'admin@admin.admin') \
+            .one() # type: models.User
+        workspace_api = WorkspaceApi(
+            current_user=admin,
+            session=dbsession,
+            config=self.app_config
+        )
+        business_workspace = workspace_api.get_one(1)
+        content_api = ContentApi(
+            current_user=admin,
+            session=dbsession,
+            config=self.app_config
+        )
+        tool_folder = content_api.get_one(1, content_type=content_type_list.Any_SLUG)
+        test_thread = content_api.create(
+            content_type_slug=content_type_list.Thread.slug,
+            workspace=business_workspace,
+            parent=tool_folder,
+            label='Test Thread',
+            do_save=True,
+            do_notify=False,
+        )
+        with new_revision(
+           session=dbsession,
+           tm=transaction.manager,
+           content=test_thread,
+        ):
+            content_api.update_content(
+                test_thread,
+                new_label='test_thread_updated',
+                new_content='Just a test'
+            )
+        transaction.commit()
+        self.testapp.authorization = (
+            'Basic',
+            (
+                'admin@admin.admin',
+                'admin@admin.admin'
+            )
+        )
+        params = {
+            'raw_content': 'I strongly disagree,\n Tiramisu win!',
+            'raw_content_markup': TEXT_MARKUP,
+        }
+        res = self.testapp.post_json(
+            '/api/v2/workspaces/{}/contents/{}/comments'.format(
+                business_workspace.workspace_id,
+                test_thread.content_id
+            ),
+            params=params,
+            status=200
+        )
+        comment = res.json_body
+        assert comment['content_id']
+        assert comment['parent_id'] == test_thread.content_id
+        assert comment['raw_content'] == 'I strongly disagree,<br/> Tiramisu win!'  # nopep8
         assert comment['author']
         assert comment['author']['user_id'] == admin.user_id
         # TODO - G.M - 2018-06-172 - [avatar] setup avatar url

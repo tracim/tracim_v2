@@ -94,6 +94,7 @@ class CommentController(Controller):
             content.workspace,
             content,
             hapic_data.body.raw_content,
+            hapic_data.body.raw_content_markup,
             do_save=True,
         )
         return api.get_content_in_context(comment)

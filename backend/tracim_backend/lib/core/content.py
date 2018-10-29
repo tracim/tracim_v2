@@ -9,9 +9,6 @@ import sqlalchemy
 import transaction
 from depot.io.utils import FileIntent
 from depot.manager import DepotManager
-from preview_generator.exception import UnavailablePreviewType
-from preview_generator.exception import UnsupportedMimeType
-from preview_generator.manager import PreviewManager
 from sqlalchemy import desc
 from sqlalchemy import func
 from sqlalchemy import or_
@@ -24,12 +21,15 @@ from sqlalchemy.orm.exc import NoResultFound
 from sqlalchemy.orm.session import Session
 from sqlalchemy.sql.elements import and_
 
-from tracim_backend.app_models.contents import content_status_list
-from tracim_backend.app_models.contents import content_type_list
+from preview_generator.exception import UnavailablePreviewType
+from preview_generator.exception import UnsupportedMimeType
+from preview_generator.manager import PreviewManager
 from tracim_backend.app_models.contents import FOLDER_TYPE
 from tracim_backend.app_models.contents import ContentStatus
 from tracim_backend.app_models.contents import ContentType
 from tracim_backend.app_models.contents import GlobalStatus
+from tracim_backend.app_models.contents import content_status_list
+from tracim_backend.app_models.contents import content_type_list
 from tracim_backend.exceptions import ContentInNotEditableState
 from tracim_backend.exceptions import ContentLabelAlreadyUsedHere
 from tracim_backend.exceptions import ContentNotFound
@@ -46,6 +46,10 @@ from tracim_backend.exceptions import UnavailablePreview
 from tracim_backend.exceptions import WorkspacesDoNotMatch
 from tracim_backend.lib.core.notifications import NotifierFactory
 from tracim_backend.lib.utils.logger import logger
+from tracim_backend.lib.utils.markup_conversion import HTML_MARKUP
+from tracim_backend.lib.utils.markup_conversion import TEXT_MARKUP
+from tracim_backend.lib.utils.markup_conversion import \
+    convert_to_another_markup
 from tracim_backend.lib.utils.translation import DEFAULT_FALLBACK_LANG
 from tracim_backend.lib.utils.translation import Translator
 from tracim_backend.lib.utils.utils import cmp_to_key
@@ -614,12 +618,20 @@ class ContentApi(object):
             self.save(content, ActionDescription.CREATION, do_notify=do_notify)
         return content
 
-    def create_comment(self, workspace: Workspace=None, parent: Content=None, content:str ='', do_save=False, do_notify=True) -> Content:
+    def create_comment(
+            self,
+            workspace: Workspace=None,
+            parent: Content=None,
+            content:str ='',
+            raw_content_markup: str=None,
+            do_save: bool=False,
+            do_notify: bool=True,
+    ) -> Content:
         # TODO: check parent allowed_type and workspace allowed_ type
         assert parent and parent.type != FOLDER_TYPE
         if not self.is_editable(parent):
             raise ContentInNotEditableState(
-                "Can't create comment on content, you need to change his status or state (deleted/archived) before any change."
+                "Can't create comment on content, you need to change his status or state (deleted/archived) before any change."  # nopep8
             )
         if not content:
             raise EmptyCommentContentNotAllowed()
@@ -632,7 +644,11 @@ class ContentApi(object):
             do_save=False,
             label='',
         )
-        item.description = content
+        item.description = convert_to_another_markup(
+            content=content,
+            input_markup=raw_content_markup,
+            output_markup=content_type_list.Comment.raw_content_markup
+        )
         item.revision_type = ActionDescription.COMMENT
 
         if do_save:
@@ -1470,9 +1486,14 @@ class ContentApi(object):
                and item.is_active \
                and item.get_status().is_editable()
 
-    def update_content(self, item: Content, new_label: str, new_content: str=None) -> Content:
+    def update_content(self, item: Content, new_label: str, new_content: str=None, raw_content_markup: str=None) -> Content:
         if not self.is_editable(item):
             raise ContentInNotEditableState("Can't update not editable file, you need to change his status or state (deleted/archived) before any change.")  # nopep8
+        new_content = convert_to_another_markup(
+            content=new_content,
+            input_markup=raw_content_markup,
+            output_markup=content_type_list.Comment.raw_content_markup
+        )
         if item.label == new_label and item.description == new_content:
             # TODO - G.M - 20-03-2018 - Fix internatization for webdav access.
             # Internatization disabled in libcontent for now.

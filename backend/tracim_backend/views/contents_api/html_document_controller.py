@@ -100,7 +100,7 @@ class HTMLDocumentController(Controller):
                 item=content,
                 new_label=hapic_data.body.label,
                 new_content=hapic_data.body.raw_content,
-
+                raw_content_markup=hapic_data.body.raw_content_markup
             )
             api.save(content)
         return api.get_content_in_context(content)
