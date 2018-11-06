@@ -285,6 +285,18 @@ class Dashboard extends React.Component {
           case 2042:
             props.dispatch(newFlashMessage(props.t('This account is deactivated'), 'warning'))
             return false
+          case 1001:
+            const ErrorMsg = () => (
+              <div>
+                {props.t('Unknown user')}<br />
+                {props.t('Note, only administrators can send invitational email')}
+              </div>
+            )
+            props.dispatch(newFlashMessage(<ErrorMsg />))
+            return false
+          case 3008:
+            props.dispatch(newFlashMessage(props.t('This user already is in the workspace'), 'warning'))
+            return false
           default:
             props.dispatch(newFlashMessage(props.t('Error while adding the member to the shared space'), 'warning'))
             return false

@@ -15,7 +15,7 @@ from tracim_backend.extensions import app_list
 from tracim_backend.lib.core.application import ApplicationApi
 from tracim_backend.lib.utils.utils import CONTENT_FRONTEND_URL_SCHEMA
 from tracim_backend.lib.utils.utils import WORKSPACE_FRONTEND_URL_SCHEMA
-from tracim_backend.lib.utils.utils import get_root_frontend_url
+from tracim_backend.lib.utils.utils import get_frontend_ui_base_url
 from tracim_backend.lib.utils.utils import password_generator
 from tracim_backend.models import User
 from tracim_backend.models.auth import Group
@@ -635,7 +635,7 @@ class WorkspaceInContext(object):
 
     @property
     def frontend_url(self):
-        root_frontend_url = get_root_frontend_url(self.config)
+        root_frontend_url = get_frontend_ui_base_url(self.config)
         workspace_frontend_url = WORKSPACE_FRONTEND_URL_SCHEMA.format(
             workspace_id=self.workspace_id,
         )
@@ -789,6 +789,20 @@ class ContentInContext(object):
         return self.content.is_deleted
 
     @property
+    def is_editable(self) -> bool:
+        from tracim_backend.lib.core.content import ContentApi
+        content_api = ContentApi(
+            current_user=self._user,
+            session=self.dbsession,
+            config=self.config,
+            show_deleted=True,
+            show_archived=True,
+            show_active=True,
+            show_temporary=True,
+        )
+        return content_api.is_editable(self.content)
+
+    @property
     def raw_content(self) -> str:
         return self.content.description
 
@@ -845,7 +859,7 @@ class ContentInContext(object):
 
     @property
     def frontend_url(self) -> str:
-        root_frontend_url = get_root_frontend_url(self.config)
+        root_frontend_url = get_frontend_ui_base_url(self.config)
         content_frontend_url = CONTENT_FRONTEND_URL_SCHEMA.format(
             workspace_id=self.workspace_id,
             content_type=self.content_type,
@@ -864,7 +878,11 @@ class ContentInContext(object):
             content_api = ContentApi(
                 current_user=self._user,
                 session=self.dbsession,
-                config=self.config
+                config=self.config,
+                show_deleted=True,
+                show_archived=True,
+                show_active=True,
+                show_temporary=True,
             )
             return content_api.get_preview_page_nb(
                 self.content.revision_id,
@@ -900,7 +918,11 @@ class ContentInContext(object):
             content_api = ContentApi(
                 current_user=self._user,
                 session=self.dbsession,
-                config=self.config
+                config=self.config,
+                show_deleted=True,
+                show_archived=True,
+                show_active=True,
+                show_temporary=True,
             )
             return content_api.has_pdf_preview(
                 self.content.revision_id,
@@ -980,6 +1002,29 @@ class RevisionInContext(object):
     @property
     def is_deleted(self) -> bool:
         return self.revision.is_deleted
+
+    @property
+    def is_editable(self) -> bool:
+        from tracim_backend.lib.core.content import ContentApi
+        content_api = ContentApi(
+            current_user=self._user,
+            session=self.dbsession,
+            config=self.config,
+            show_deleted=True,
+            show_archived=True,
+            show_active=True,
+            show_temporary=True,
+        )
+        # INFO - G.M - 2018-11-02 - check if revision is last one and if it is,
+        # return editability of content.
+        content = content_api.get_one(
+            content_id=self.revision.content_id,
+            content_type=content_type_list.Any_SLUG
+        )
+        if content.revision_id == self.revision_id:
+            return content_api.is_editable(content)
+        # INFO - G.M - 2018-11-02 - old revision are not editable
+        return False
 
     @property
     def raw_content(self) -> str:
@@ -1091,7 +1136,11 @@ class RevisionInContext(object):
             content_api = ContentApi(
                 current_user=self._user,
                 session=self.dbsession,
-                config=self.config
+                config=self.config,
+                show_deleted=True,
+                show_archived=True,
+                show_active=True,
+                show_temporary=True,
             )
             return content_api.get_preview_page_nb(
                 self.revision.revision_id,
@@ -1127,7 +1176,11 @@ class RevisionInContext(object):
             content_api = ContentApi(
                 current_user=self._user,
                 session=self.dbsession,
-                config=self.config
+                config=self.config,
+                show_deleted=True,
+                show_archived=True,
+                show_active=True,
+                show_temporary=True,
             )
             return content_api.has_pdf_preview(
                 self.revision.revision_id,

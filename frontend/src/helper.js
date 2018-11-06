@@ -1,6 +1,9 @@
-import i18n from './i18n.js'
+import i18n, { getBrowserLang } from './i18n.js'
 
 const configEnv = require('../configEnv.json')
+
+// this function is declared in i18n to avoid cyclic imports and reexported here for consistency
+export { getBrowserLang }
 
 export const FETCH_CONFIG = {
   headers: {
@@ -20,25 +23,25 @@ export const workspaceConfig = {
 }
 
 export const PAGE = {
-  HOME: '/',
+  HOME: '/ui',
   WORKSPACE: {
-    ROOT: '/workspaces',
-    DASHBOARD: (idws = ':idws') => `/workspaces/${idws}/dashboard`,
-    NEW: (idws, type) => `/workspaces/${idws}/contents/${type}/new`,
-    CALENDAR: (idws = ':idws') => `/workspaces/${idws}/calendar`,
-    CONTENT_LIST: (idws = ':idws') => `/workspaces/${idws}/contents`,
-    CONTENT: (idws = ':idws', type = ':type', idcts = ':idcts') => `/workspaces/${idws}/contents/${type}/${idcts}`,
-    ADMIN: (idws = ':idws') => `/workspaces/${idws}/admin`
+    ROOT: '/ui/workspaces',
+    DASHBOARD: (idws = ':idws') => `/ui/workspaces/${idws}/dashboard`,
+    NEW: (idws, type) => `/ui/workspaces/${idws}/contents/${type}/new`,
+    CALENDAR: (idws = ':idws') => `/ui/workspaces/${idws}/calendar`,
+    CONTENT_LIST: (idws = ':idws') => `/ui/workspaces/${idws}/contents`,
+    CONTENT: (idws = ':idws', type = ':type', idcts = ':idcts') => `/ui/workspaces/${idws}/contents/${type}/${idcts}`,
+    ADMIN: (idws = ':idws') => `/ui/workspaces/${idws}/admin`
   },
-  LOGIN: '/login',
-  FORGOT_PASSWORD: '/forgot-password',
-  RESET_PASSWORD: '/reset-password',
-  ACCOUNT: '/account',
+  LOGIN: '/ui/login',
+  FORGOT_PASSWORD: '/ui/forgot-password',
+  RESET_PASSWORD: '/ui/reset-password',
+  ACCOUNT: '/ui/account',
   ADMIN: {
-    ROOT: '/admin',
-    WORKSPACE: '/admin/workspace',
-    USER: '/admin/user',
-    USER_EDIT: (idUser = ':iduser') => `/admin/user/${idUser}`
+    ROOT: '/ui/admin',
+    WORKSPACE: '/ui/admin/workspace',
+    USER: '/ui/admin/user',
+    USER_EDIT: (idUser = ':iduser') => `/ui/admin/user/${idUser}`
   }
 }
 
@@ -49,25 +52,29 @@ export const ROLE = [{
   slug: 'workspace-manager',
   faIcon: 'gavel',
   hexcolor: '#ed0007',
-  label: i18n.t('Shared space manager')
+  tradKey: i18n.t('Shared space manager'), // trad key allow the parser to generate an entry in the json file
+  label: 'Shared space manager' // label must be used in components
 }, {
   id: 4,
   slug: 'content-manager',
   faIcon: 'graduation-cap',
   hexcolor: '#f2af2d',
-  label: i18n.t('Content manager')
+  tradKey: i18n.t('Content manager'), // trad key allow the parser to generate an entry in the json file
+  label: 'Content manager' // label must be used in components
 }, {
   id: 2,
   slug: 'contributor',
   faIcon: 'pencil',
   hexcolor: '#3145f7',
-  label: i18n.t('Contributor')
+  tradKey: i18n.t('Contributor'), // trad key allow the parser to generate an entry in the json file
+  label: 'Contributor' // label must be used in components
 }, {
   id: 1,
   slug: 'reader',
   faIcon: 'eye',
   hexcolor: '#15d948',
-  label: i18n.t('Reader')
+  tradKey: i18n.t('Reader'), // trad key allow the parser to generate an entry in the json file
+  label: 'Reader' // label must be used in components
 }]
 
 export const findIdRoleUserWorkspace = (idUser, memberList, roleList) => {
@@ -82,28 +89,32 @@ export const ROLE2 = {
     sluf: 'reader',
     faIcon: 'eye',
     hexcolor: '#15D948',
-    label: i18n.t('Reader')
+    tradKey: i18n.t('Reader'), // trad key allow the parser to generate an entry in the json file
+    label: 'Reader' // label must be used in components
   },
   contributor: {
     id: 2,
     slug: 'contributor',
     faIcon: 'pencil',
     hexcolor: '#3145f7',
-    label: i18n.t('Contributor')
+    tradKey: i18n.t('Contributor'), // trad key allow the parser to generate an entry in the json file
+    label: 'Contributor' // label must be used in components
   },
   contentManager: {
     id: 4,
     slug: 'content-manager',
     faIcon: 'graduation-cap',
     hexcolor: '#f2af2d',
-    label: i18n.t('Content manager')
+    tradKey: i18n.t('Content manager'), // trad key allow the parser to generate an entry in the json file
+    label: 'Content manager' // label must be used in components
   },
   workspaceManager: {
     id: 8,
     slug: 'workspace-manager',
     faIcon: 'gavel',
     hexcolor: '#ed0007',
-    label: i18n.t('Shared space manager')
+    tradKey: i18n.t('Shared space manager'), // trad key allow the parser to generate an entry in the json file
+    label: 'Shared space manager' // label must be used in components
   }
 }
 
@@ -113,21 +124,24 @@ export const PROFILE = {
     slug: 'administrators',
     faIcon: 'shield',
     hexcolor: '#ed0007',
-    label: i18n.t('Administrator')
+    tradKey: i18n.t('Administrator'), // trad key allow the parser to generate an entry in the json file
+    label: 'Administrator' // label must be used in components
   },
   MANAGER: {
     id: 2,
     slug: 'trusted-users',
     faIcon: 'graduation-cap',
     hexcolor: '#f2af2d',
-    label: i18n.t('Trusted user')
+    tradKey: i18n.t('Trusted user'), // trad key allow the parser to generate an entry in the json file
+    label: 'Trusted user' // label must be used in components
   },
   USER: {
     id: 4,
     slug: 'users',
     faIcon: 'user',
     hexcolor: '#3145f7',
-    label: i18n.t('User')
+    tradKey: i18n.t('User'), // trad key allow the parser to generate an entry in the json file
+    label: 'User' // label must be used in components
   }
 }
 

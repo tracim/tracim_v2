@@ -293,6 +293,35 @@ class TestWorkspaceEndpoint(FunctionalTest):
         workspace_2 = res.json_body
         assert workspace == workspace_2
 
+    def test_api__create_workspace_err_400__label_already_used(self) -> None:
+        """
+        Test create workspace : label already used
+        """
+        self.testapp.authorization = (
+            'Basic',
+            (
+                'admin@admin.admin',
+                'admin@admin.admin'
+            )
+        )
+        params = {
+            'label': 'superworkspace',
+            'description': 'mysuperdescription'
+        }
+        res = self.testapp.post_json(
+            '/api/v2/workspaces',
+            status=200,
+            params=params,
+        )
+        res = self.testapp.post_json(
+            '/api/v2/workspaces',
+            status=400,
+            params=params,
+        )
+        assert isinstance(res.json, dict)
+        assert 'code' in res.json.keys()
+        assert res.json_body['code'] == error.WORKSPACE_LABEL_ALREADY_USED
+
     def test_api__create_workspace__err_400__empty_label(self) -> None:
         """
         Test create workspace with empty label
@@ -2594,6 +2623,7 @@ class TestUserInvitationWithMailActivatedSync(FunctionalTest):
         assert 'code' in res.json.keys()
         assert res.json_body['code'] == error.USER_NOT_FOUND
 
+
 class TestUserInvitationWithMailActivatedASync(FunctionalTest):
 
     fixtures = [BaseFixture, ContentFixtures]
@@ -2727,7 +2757,7 @@ class TestWorkspaceContents(FunctionalTest):
         assert content['workspace_id'] == 1
         assert content['modified']
         assert content['created']
-    # Root related
+
     def test_api__get_workspace_content__ok_200__get_all_root_content__legacy_html_slug(self):  # nopep8
         """
         Check obtain workspace all root contents
@@ -2862,6 +2892,7 @@ class TestWorkspaceContents(FunctionalTest):
         assert content['workspace_id'] == 3
         assert content['modified']
         assert content['created']
+
     def test_api__get_workspace_content__ok_200__get_all_root_content_filter_by_label(self):  # nopep8
         """
         Check obtain workspace all root contents
@@ -2901,6 +2932,7 @@ class TestWorkspaceContents(FunctionalTest):
         assert content['workspace_id'] == 3
         assert content['modified']
         assert content['created']
+
     def test_api__get_workspace_content__ok_200__get_only_active_root_content(self):  # nopep8
         """
         Check obtain workspace root active contents
@@ -2939,6 +2971,7 @@ class TestWorkspaceContents(FunctionalTest):
         assert content['workspace_id'] == 3
         assert content['modified']
         assert content['created']
+
     def test_api__get_workspace_content__ok_200__get_only_archived_root_content(self):  # nopep8
         """
         Check obtain workspace root archived contents
@@ -2976,6 +3009,7 @@ class TestWorkspaceContents(FunctionalTest):
         assert content['workspace_id'] == 3
         assert content['modified']
         assert content['created']
+
     def test_api__get_workspace_content__ok_200__get_only_deleted_root_content(self):  # nopep8
         """
          Check obtain workspace root deleted contents
@@ -3015,6 +3049,7 @@ class TestWorkspaceContents(FunctionalTest):
         assert content['workspace_id'] == 3
         assert content['modified']
         assert content['created']
+
     def test_api__get_workspace_content__ok_200__get_nothing_root_content(self):
         """
         Check obtain workspace root content who does not match any type
@@ -3148,6 +3183,7 @@ class TestWorkspaceContents(FunctionalTest):
         assert content['workspace_id'] == 1
         assert content['modified']
         assert content['created']
+
     def test_api__get_workspace_content__ok_200__get_all_filter_content_html_and_legacy_page(self):  # nopep8
         # prepare data
         dbsession = get_tm_session(self.session_factory, transaction.manager)
@@ -3271,6 +3307,7 @@ class TestWorkspaceContents(FunctionalTest):
         assert content['workspace_id'] == 1
         assert content['modified']
         assert content['created']
+
     def test_api__get_workspace_content__ok_200__get_all_folder_content(self):
         """
          Check obtain workspace folder all contents
@@ -3337,6 +3374,7 @@ class TestWorkspaceContents(FunctionalTest):
         assert content['workspace_id'] == 2
         assert content['modified']
         assert content['created']
+
     def test_api__get_workspace_content__ok_200__get_only_active_folder_content(self):  # nopep8
         """
          Check obtain workspace folder active contents
@@ -3374,6 +3412,7 @@ class TestWorkspaceContents(FunctionalTest):
         assert content['workspace_id'] == 2
         assert content['modified']
         assert content['created']
+
     def test_api__get_workspace_content__ok_200__get_only_archived_folder_content(self):  # nopep8
         """
          Check obtain workspace folder archived contents
@@ -3411,6 +3450,7 @@ class TestWorkspaceContents(FunctionalTest):
         assert content['workspace_id'] == 2
         assert content['modified']
         assert content['created']
+
     def test_api__get_workspace_content__ok_200__get_only_deleted_folder_content(self):  # nopep8
         """
          Check obtain workspace folder deleted contents
@@ -3449,6 +3489,7 @@ class TestWorkspaceContents(FunctionalTest):
         assert content['workspace_id'] == 2
         assert content['modified']
         assert content['created']
+
     def test_api__get_workspace_content__ok_200__get_nothing_folder_content(self):  # nopep8
         """
         Check obtain workspace folder content who does not match any type
@@ -3535,7 +3576,7 @@ class TestWorkspaceContents(FunctionalTest):
 
     def test_api__post_content_create_generic_content__ok_200__nominal_case(self) -> None:  # nopep8
         """
-        Create generic content
+        Create generic content as workspace root
         """
         self.testapp.authorization = (
             'Basic',
@@ -3581,9 +3622,9 @@ class TestWorkspaceContents(FunctionalTest):
         content_ids = [content['content_id'] for content in active_contents]
         assert res.json_body['content_id'] in content_ids
 
-    def test_api__post_content_create_generic_content__err_400__label_already_used(self) -> None:  # nopep8
+    def test_api__post_content_create_generic_content__err_400__filename_already_used(self) -> None:  # nopep8
         """
-        Create generic content
+        Create generic content but filename is already used here
         """
         self.testapp.authorization = (
             'Basic',
@@ -3637,11 +3678,11 @@ class TestWorkspaceContents(FunctionalTest):
         )
         assert isinstance(res.json, dict)
         assert 'code' in res.json.keys()
-        assert res.json_body['code'] == error.CONTENT_LABEL_ALREADY_USED_THERE
+        assert res.json_body['code'] == error.CONTENT_FILENAME_ALREADY_USED_IN_FOLDER
 
     def test_api__post_content_create_generic_content__ok_200__no_parent_id_param(self) -> None:  # nopep8
         """
-        Create generic content
+        Create generic content without provided parent_id param
         """
         self.testapp.authorization = (
             'Basic',
@@ -3688,7 +3729,7 @@ class TestWorkspaceContents(FunctionalTest):
 
     def test_api__post_content_create_generic_content__err_400__parent_id_0(self) -> None:  # nopep8
         """
-        Create generic content
+        Create generic content but parent_id=0
         """
         self.testapp.authorization = (
             'Basic',
@@ -3700,7 +3741,7 @@ class TestWorkspaceContents(FunctionalTest):
         params = {
             'parent_id': 0,
             'label': 'GenericCreatedContent',
-            'content_type': 'markdownpage',
+            'content_type': content_type_list.Page.slug
         }
         res = self.testapp.post_json(
             '/api/v2/workspaces/1/contents',
@@ -3711,6 +3752,31 @@ class TestWorkspaceContents(FunctionalTest):
         assert 'code' in res.json.keys()
         # INFO - G.M - 2018-09-10 - handled by marshmallow schema
         assert res.json_body['code'] == error.GENERIC_SCHEMA_VALIDATION_ERROR  # nopep8
+
+    def test_api__post_content_create_generic_content__err_400__parent_not_found(self) -> None:  # nopep8
+        """
+        Create generic content but parent id is not valable
+        """
+        self.testapp.authorization = (
+            'Basic',
+            (
+                'admin@admin.admin',
+                'admin@admin.admin'
+            )
+        )
+        params = {
+            'parent_id': 1000,
+            'label': 'GenericCreatedContent',
+            'content_type': content_type_list.Page.slug,
+        }
+        res = self.testapp.post_json(
+            '/api/v2/workspaces/1/contents',
+            params=params,
+            status=400
+        )
+        assert isinstance(res.json, dict)
+        assert 'code' in res.json.keys()
+        assert res.json_body['code'] == error.PARENT_NOT_FOUND  # nopep8
 
     def test_api__post_content_create_generic_content__ok_200__in_folder(self) -> None:  # nopep8
         """
@@ -3762,7 +3828,7 @@ class TestWorkspaceContents(FunctionalTest):
 
     def test_api__post_content_create_generic_content__err_400__empty_label(self) -> None:  # nopep8
         """
-        Create generic content
+        Create generic content but label provided is empty
         """
         self.testapp.authorization = (
             'Basic',
@@ -3773,7 +3839,7 @@ class TestWorkspaceContents(FunctionalTest):
         )
         params = {
             'label': '',
-            'content_type': 'html-document',
+            'content_type': content_type_list.Page.slug,
         }
         res = self.testapp.post_json(
             '/api/v2/workspaces/1/contents',
@@ -3785,7 +3851,7 @@ class TestWorkspaceContents(FunctionalTest):
 
     def test_api__post_content_create_generic_content__err_400__wrong_content_type(self) -> None:  # nopep8
         """
-        Create generic content
+        Create generic content but content type is uncorrect
         """
         self.testapp.authorization = (
             'Basic',
@@ -3808,7 +3874,7 @@ class TestWorkspaceContents(FunctionalTest):
 
     def test_api__post_content_create_generic_content__err_400__unallowed_content_type(self) -> None:  # nopep8
         """
-        Create generic content
+        Create generic content but content_type is not allowed in this folder
         """
         dbsession = get_tm_session(self.session_factory, transaction.manager)
         admin = dbsession.query(models.User) \
@@ -3848,7 +3914,7 @@ class TestWorkspaceContents(FunctionalTest):
         # unallowed_content_type
         params = {
             'label': 'GenericCreatedContent',
-            'content_type': 'markdownpage',
+            'content_type': content_type_list.Page.slug,
             'parent_id': folder.content_id
         }
         res = self.testapp.post_json(
@@ -3856,8 +3922,9 @@ class TestWorkspaceContents(FunctionalTest):
             params=params,
             status=400,
         )
-        # INFO - G.M - 2018-09-10 - handled by marshmallow schema
-        assert res.json_body['code'] == error.GENERIC_SCHEMA_VALIDATION_ERROR  # nopep8
+        assert isinstance(res.json, dict)
+        assert 'code' in res.json.keys()
+        assert res.json_body['code'] == error.UNALLOWED_SUBCONTENT  # nopep8
         # allowed_content_type
         params = {
             'label': 'GenericCreatedContent',
