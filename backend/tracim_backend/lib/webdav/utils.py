@@ -201,7 +201,6 @@ class FakeFileStream(object):
         with new_revision(
                 session=self._session,
                 content=self._content,
-                tm=transaction.manager,
         ):
             self._api.update_file_data(
                 self._content,

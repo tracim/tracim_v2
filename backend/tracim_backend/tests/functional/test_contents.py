@@ -701,7 +701,6 @@ class TestFolder(FunctionalTest):
         )
         with new_revision(
            session=dbsession,
-           tm=transaction.manager,
            content=folder,
         ):
             content_api.update_content(
@@ -712,7 +711,6 @@ class TestFolder(FunctionalTest):
         content_api.save(folder)
         with new_revision(
            session=dbsession,
-           tm=transaction.manager,
            content=folder,
         ):
             content_api.archive(
@@ -721,7 +719,6 @@ class TestFolder(FunctionalTest):
         content_api.save(folder)
         with new_revision(
            session=dbsession,
-           tm=transaction.manager,
            content=folder,
         ):
             content_api.unarchive(
@@ -1639,7 +1636,6 @@ class TestFiles(FunctionalTest):
         )
         with new_revision(
             session=dbsession,
-            tm=transaction.manager,
             content=test_file,
         ):
             content_api.update_file_data(
@@ -1650,7 +1646,6 @@ class TestFiles(FunctionalTest):
             )
         with new_revision(
             session=dbsession,
-            tm=transaction.manager,
             content=test_file,
         ):
             content_api.update_content(test_file, 'Test_file', '<p>description</p>')  # nopep8
@@ -1804,7 +1799,6 @@ class TestFiles(FunctionalTest):
         )
         with new_revision(
             session=dbsession,
-            tm=transaction.manager,
             content=test_file,
         ):
             content_api.update_file_data(
@@ -2003,7 +1997,6 @@ class TestFiles(FunctionalTest):
         )
         with new_revision(
             session=dbsession,
-            tm=transaction.manager,
             content=test_file,
         ):
             content_api.update_file_data(
@@ -2014,7 +2007,6 @@ class TestFiles(FunctionalTest):
             )
         with new_revision(
             session=dbsession,
-            tm=transaction.manager,
             content=test_file,
         ):
             content_api.update_content(test_file, 'Test_file', '<p>description</p>')  # nopep8
@@ -2079,7 +2071,6 @@ class TestFiles(FunctionalTest):
             )
         with new_revision(
             session=dbsession,
-            tm=transaction.manager,
             content=test_file,
         ):
             content_api.update_content(test_file, 'Test_file', '<p>description</p>')  # nopep8
@@ -2201,7 +2192,6 @@ class TestFiles(FunctionalTest):
             )
         with new_revision(
             session=dbsession,
-            tm=transaction.manager,
             content=test_file,
         ):
             content_api.update_content(test_file, 'Test_file', '<p>description</p>')  # nopep8
@@ -2268,7 +2258,6 @@ class TestFiles(FunctionalTest):
             )
         with new_revision(
             session=dbsession,
-            tm=transaction.manager,
             content=test_file,
         ):
             content_api.update_content(test_file, 'Test_file', '<p>description</p>')  # nopep8
@@ -2335,7 +2324,6 @@ class TestFiles(FunctionalTest):
             )
         with new_revision(
             session=dbsession,
-            tm=transaction.manager,
             content=test_file,
         ):
             content_api.update_content(test_file, 'Test_file', '<p>description</p>')  # nopep8
@@ -2394,7 +2382,6 @@ class TestFiles(FunctionalTest):
         )
         with new_revision(
             session=dbsession,
-            tm=transaction.manager,
             content=test_file,
         ):
             content_api.update_file_data(
@@ -2405,7 +2392,6 @@ class TestFiles(FunctionalTest):
             )
         with new_revision(
             session=dbsession,
-            tm=transaction.manager,
             content=test_file,
         ):
             content_api.update_content(test_file, 'Test_file', '<p>description</p>')  # nopep8
@@ -2558,7 +2544,6 @@ class TestFiles(FunctionalTest):
         )
         with new_revision(
             session=dbsession,
-            tm=transaction.manager,
             content=test_file,
         ):
             content_api.update_content(test_file, 'Test_file', '<p>description</p>')  # nopep8
@@ -2626,7 +2611,6 @@ class TestFiles(FunctionalTest):
         )
         with new_revision(
             session=dbsession,
-            tm=transaction.manager,
             content=test_file,
         ):
             content_api.update_file_data(
@@ -2637,7 +2621,6 @@ class TestFiles(FunctionalTest):
             )
         with new_revision(
             session=dbsession,
-            tm=transaction.manager,
             content=test_file,
         ):
             content_api.update_content(test_file, 'Test_file', '<p>description</p>')  # nopep8
@@ -2720,7 +2703,6 @@ class TestFiles(FunctionalTest):
         )
         with new_revision(
             session=dbsession,
-            tm=transaction.manager,
             content=test_file,
         ):
             content_api.update_content(test_file, 'Test_file', '<p>description</p>')  # nopep8
@@ -2801,7 +2783,6 @@ class TestFiles(FunctionalTest):
         )
         with new_revision(
             session=dbsession,
-            tm=transaction.manager,
             content=test_file,
         ):
             content_api.update_content(test_file, 'Test_file', '<p>description</p>')  # nopep8
@@ -2874,7 +2855,6 @@ class TestFiles(FunctionalTest):
         )
         with new_revision(
             session=dbsession,
-            tm=transaction.manager,
             content=test_file,
         ):
             content_api.update_content(test_file, 'Test_file', '<p>description</p>')  # nopep8
@@ -2927,7 +2907,6 @@ class TestFiles(FunctionalTest):
         )
         with new_revision(
             session=dbsession,
-            tm=transaction.manager,
             content=test_file,
         ):
             content_api.update_file_data(
@@ -3206,7 +3185,6 @@ class TestFiles(FunctionalTest):
         )
         with new_revision(
                 session=dbsession,
-                tm=transaction.manager,
                 content=folder,
         ):
             content_api.set_allowed_content(folder, [])
@@ -3727,7 +3705,6 @@ class TestFiles(FunctionalTest):
         )
         with new_revision(
             session=dbsession,
-            tm=transaction.manager,
             content=test_file,
         ):
             content_api.update_file_data(
@@ -3843,7 +3820,6 @@ class TestFiles(FunctionalTest):
         )
         with new_revision(
             session=dbsession,
-            tm=transaction.manager,
             content=test_file,
         ):
             content_api.update_file_data(
@@ -4300,7 +4276,6 @@ class TestFiles(FunctionalTest):
         )
         with new_revision(
                 session=dbsession,
-                tm=transaction.manager,
                 content=test_file,
         ):
             test_file.file_extension = '.txt'
@@ -4364,7 +4339,6 @@ class TestFiles(FunctionalTest):
         )
         with new_revision(
                 session=dbsession,
-                tm=transaction.manager,
                 content=test_file,
         ):
             test_file.file_extension = '.txt'
@@ -4496,7 +4470,6 @@ class TestFiles(FunctionalTest):
         )
         with new_revision(
             session=dbsession,
-            tm=transaction.manager,
             content=test_file,
         ):
             content_api.update_file_data(
@@ -4554,7 +4527,6 @@ class TestFiles(FunctionalTest):
         )
         with new_revision(
                 session=dbsession,
-                tm=transaction.manager,
                 content=test_file,
         ):
             test_file.file_extension = '.txt'
@@ -4620,7 +4592,6 @@ class TestFiles(FunctionalTest):
         )
         with new_revision(
             session=dbsession,
-            tm=transaction.manager,
             content=test_file,
         ):
             content_api.update_file_data(
@@ -4679,7 +4650,6 @@ class TestFiles(FunctionalTest):
         )
         with new_revision(
                 session=dbsession,
-                tm=transaction.manager,
                 content=test_file,
         ):
             test_file.file_extension = '.txt'
@@ -4747,7 +4717,6 @@ class TestFiles(FunctionalTest):
         )
         with new_revision(
                 session=dbsession,
-                tm=transaction.manager,
                 content=test_file,
         ):
             test_file.file_extension = '.txt'
@@ -5530,7 +5499,6 @@ class TestThreads(FunctionalTest):
         )
         with new_revision(
            session=dbsession,
-           tm=transaction.manager,
            content=test_thread,
         ):
             content_api.update_content(
@@ -5541,7 +5509,6 @@ class TestThreads(FunctionalTest):
         content_api.save(test_thread)
         with new_revision(
            session=dbsession,
-           tm=transaction.manager,
            content=test_thread,
         ):
             content_api.archive(test_thread)
@@ -5549,7 +5516,6 @@ class TestThreads(FunctionalTest):
 
         with new_revision(
            session=dbsession,
-           tm=transaction.manager,
            content=test_thread,
         ):
             content_api.unarchive(test_thread)
@@ -5557,7 +5523,6 @@ class TestThreads(FunctionalTest):
 
         with new_revision(
            session=dbsession,
-           tm=transaction.manager,
            content=test_thread,
         ):
             content_api.delete(test_thread)
@@ -5565,7 +5530,6 @@ class TestThreads(FunctionalTest):
 
         with new_revision(
            session=dbsession,
-           tm=transaction.manager,
            content=test_thread,
         ):
             content_api.undelete(test_thread)

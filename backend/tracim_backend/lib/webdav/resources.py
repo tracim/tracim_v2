@@ -66,7 +66,6 @@ class ManageActions(object):
     def action(self):
         with new_revision(
             session=self.session,
-            tm=transaction.manager,
             content=self.content,
         ):
             self._actions[self._type](self.content)
@@ -523,7 +522,6 @@ class FolderResource(WorkspaceResource):
 
         with new_revision(
             content=self.content,
-            tm=transaction.manager,
             session=self.session,
         ):
             if basename(destpath) != self.getDisplayName():
@@ -1231,7 +1229,6 @@ class FileResource(DAVNonCollection):
 
         with new_revision(
             content=self.content,
-            tm=transaction.manager,
             session=self.session,
         ):
             # INFO - G.M - 2018-03-09 - First, renaming file if needed

@@ -633,7 +633,6 @@ class WorkspaceController(Controller):
 
         with new_revision(
                 session=request.dbsession,
-                tm=transaction.manager,
                 content=content
         ):
             api.move(
@@ -678,7 +677,6 @@ class WorkspaceController(Controller):
         )
         with new_revision(
                 session=request.dbsession,
-                tm=transaction.manager,
                 content=content
         ):
             api.delete(content)
@@ -712,7 +710,6 @@ class WorkspaceController(Controller):
         )
         with new_revision(
                 session=request.dbsession,
-                tm=transaction.manager,
                 content=content
         ):
             api.undelete(content)
@@ -747,7 +744,6 @@ class WorkspaceController(Controller):
         content = api.get_one(path_data.content_id, content_type=content_type_list.Any_SLUG)  # nopep8
         with new_revision(
                 session=request.dbsession,
-                tm=transaction.manager,
                 content=content
         ):
             api.archive(content)
@@ -781,7 +777,6 @@ class WorkspaceController(Controller):
         )
         with new_revision(
                 session=request.dbsession,
-                tm=transaction.manager,
                 content=content
         ):
             api.unarchive(content)

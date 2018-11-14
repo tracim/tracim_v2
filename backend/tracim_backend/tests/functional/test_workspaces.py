@@ -3129,7 +3129,6 @@ class TestWorkspaceContents(FunctionalTest):
         test_page_legacy.type = 'page'
         with new_revision(
             session=dbsession,
-            tm=transaction.manager,
             content=test_page_legacy,
         ):
             content_api.update_content(test_page_legacy, 'test_page', '<p>PAGE</p>')
@@ -3142,7 +3141,6 @@ class TestWorkspaceContents(FunctionalTest):
         )
         with new_revision(
             session=dbsession,
-            tm=transaction.manager,
             content=test_html_document,
         ):
             content_api.update_content(test_html_document, 'test_page', '<p>HTML_DOCUMENT</p>')  # nopep8
@@ -3237,7 +3235,6 @@ class TestWorkspaceContents(FunctionalTest):
         test_page_legacy.type = 'page'
         with new_revision(
             session=dbsession,
-            tm=transaction.manager,
             content=test_page_legacy,
         ):
             content_api.update_content(test_page_legacy, 'test_page', '<p>PAGE</p>')
@@ -3251,7 +3248,6 @@ class TestWorkspaceContents(FunctionalTest):
         )
         with new_revision(
             session=dbsession,
-            tm=transaction.manager,
             content=test_html_document,
         ):
             content_api.update_content(test_html_document, 'test_html_page', '<p>HTML_DOCUMENT</p>')  # nopep8

@@ -1467,7 +1467,6 @@ class ContentApi(object):
         # INFO - GM - 15-03-2018 - add "copy" revision
         with new_revision(
             session=self._session,
-            tm=transaction.manager,
             content=content,
             force_create_new_revision=True
         ) as rev:
@@ -1495,7 +1494,6 @@ class ContentApi(object):
         for child in item.children:
             with new_revision(
                 session=self._session,
-                tm=transaction.manager,
                 content=child
             ):
                 self.move_recursively(child, item, new_workspace)

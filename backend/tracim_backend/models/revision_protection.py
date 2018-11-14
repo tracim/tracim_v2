@@ -65,7 +65,6 @@ class RevisionsIntegrity(object):
 @contextmanager
 def new_revision(
         session: Session,
-        tm: TransactionManager,
         content: Content,
         force_create_new_revision: bool=False,
 ) -> Content:
@@ -73,7 +72,6 @@ def new_revision(
     Prepare context to update a Content. It will add a new updatable revision
     to the content.
     :param session: Database _session
-    :param tm: TransactionManager
     :param content: Content instance to update
     :param force_create_new_revision: Decide if new_rev should or should not
     be forced.
@@ -86,14 +84,8 @@ def new_revision(
                 content.new_revision()
             RevisionsIntegrity.add_to_updatable(content.revision)
             yield content
-        except Exception as e:
-            # INFO - GM - 14-11-2018 - rollback session and renew
-            # transaction when error happened
-            # This avoid bad _session data like new "temporary" revision
-            # to be add when problem happen.
+        except Exception as exc:
             session.rollback()
-            tm.abort()
-            tm.begin()
-            raise e
+            raise exc
         finally:
             RevisionsIntegrity.remove_from_updatable(content.revision)

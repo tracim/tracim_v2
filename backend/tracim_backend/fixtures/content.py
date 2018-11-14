@@ -138,7 +138,6 @@ class Content(Fixture):
         )
         with new_revision(
                 session=self._session,
-                tm=transaction.manager,
                 content=tiramisu_page,
         ):
             content_api.update_content(
@@ -221,7 +220,6 @@ class Content(Fixture):
         )
         with new_revision(
                 session=self._session,
-                tm=transaction.manager,
                 content=old_fruit_salad,
         ):
             content_api.archive(old_fruit_salad)
@@ -237,7 +235,6 @@ class Content(Fixture):
         )
         with new_revision(
                 session=self._session,
-                tm=transaction.manager,
                 content=bad_fruit_salad,
         ):
             content_api.delete(bad_fruit_salad)
@@ -258,7 +255,6 @@ class Content(Fixture):
         )
         with new_revision(
                 session=self._session,
-                tm=transaction.manager,
                 content=old_fruit_salad,
         ):
             content_api.archive(old_fruit_salad)
@@ -272,7 +268,6 @@ class Content(Fixture):
         )
         with new_revision(
                 session=self._session,
-                tm=transaction.manager,
                 content=bad_fruit_salad,
         ):
             content_api.delete(bad_fruit_salad)
@@ -295,7 +290,6 @@ class Content(Fixture):
         )
         with new_revision(
                 session=self._session,
-                tm=transaction.manager,
                 content=best_cake_thread,
         ):
             bob_content_api.update_content(
@@ -307,7 +301,6 @@ class Content(Fixture):
 
         with new_revision(
                 session=self._session,
-                tm=transaction.manager,
                 content=tiramisu_page,
         ):
             bob_content_api.update_content(

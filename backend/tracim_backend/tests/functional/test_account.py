@@ -104,7 +104,6 @@ class TestAccountRecentlyActiveContentEndpoint(FunctionalTest):
         secondly_created_but_not_updated = api.create(content_type_list.Page.slug, workspace, main_folder, 'another update_order_test', '', True)  # nopep8
         with new_revision(
             session=dbsession,
-            tm=transaction.manager,
             content=firstly_created_but_recently_updated,
         ):
             firstly_created_but_recently_updated.description = 'Just an update'
@@ -204,7 +203,6 @@ class TestAccountRecentlyActiveContentEndpoint(FunctionalTest):
         secondly_created_but_not_updated = api.create(content_type_list.Page.slug, workspace, main_folder, 'another update_order_test', '', True)  # nopep8
         with new_revision(
             session=dbsession,
-            tm=transaction.manager,
             content=firstly_created_but_recently_updated,
         ):
             firstly_created_but_recently_updated.description = 'Just an update'
@@ -316,7 +314,6 @@ class TestAccountRecentlyActiveContentEndpoint(FunctionalTest):
         secondly_created_but_not_updated = api.create(content_type_list.Page.slug, workspace, main_folder, 'another update_order_test', '', True)  # nopep8
         with new_revision(
             session=dbsession,
-            tm=transaction.manager,
             content=firstly_created_but_recently_updated,
         ):
             firstly_created_but_recently_updated.description = 'Just an update'
@@ -424,7 +421,6 @@ class TestUserReadStatusEndpoint(FunctionalTest):
         secondly_created_but_not_updated = api.create(content_type_list.Page.slug, workspace, main_folder, 'another update_order_test', '', True)  # nopep8
         with new_revision(
             session=dbsession,
-            tm=transaction.manager,
             content=firstly_created_but_recently_updated,
         ):
             firstly_created_but_recently_updated.description = 'Just an update'

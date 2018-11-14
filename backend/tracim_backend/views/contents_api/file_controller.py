@@ -119,7 +119,6 @@ class FileController(Controller):
         api.save(content, ActionDescription.CREATION)
         with new_revision(
                 session=request.dbsession,
-                tm=transaction.manager,
                 content=content
         ):
             api.update_file_data(
@@ -160,7 +159,6 @@ class FileController(Controller):
         _file = hapic_data.files.files
         with new_revision(
                 session=request.dbsession,
-                tm=transaction.manager,
                 content=content
         ):
             api.update_file_data(
@@ -651,7 +649,6 @@ class FileController(Controller):
         )
         with new_revision(
                 session=request.dbsession,
-                tm=transaction.manager,
                 content=content
         ):
             api.update_content(
@@ -720,7 +717,6 @@ class FileController(Controller):
         )
         with new_revision(
                 session=request.dbsession,
-                tm=transaction.manager,
                 content=content
         ):
             api.set_status(

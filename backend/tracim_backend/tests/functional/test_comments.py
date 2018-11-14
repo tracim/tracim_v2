@@ -96,7 +96,6 @@ class TestCommentsEndpoint(FunctionalTest):
         )
         with new_revision(
            session=dbsession,
-           tm=transaction.manager,
            content=test_thread,
         ):
             content_api.update_content(
@@ -165,7 +164,6 @@ class TestCommentsEndpoint(FunctionalTest):
         )
         with new_revision(
            session=dbsession,
-           tm=transaction.manager,
            content=test_thread,
         ):
             content_api.update_content(

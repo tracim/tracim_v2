@@ -93,7 +93,6 @@ class FolderController(Controller):
         )
         with new_revision(
                 session=request.dbsession,
-                tm=transaction.manager,
                 content=content
         ):
             api.update_content(
@@ -165,7 +164,6 @@ class FolderController(Controller):
         )
         with new_revision(
                 session=request.dbsession,
-                tm=transaction.manager,
                 content=content
         ):
             api.set_status(

@@ -32,7 +32,6 @@ class TestContent(StandardTest):
         content1 = self.test_create()
         with new_revision(
                 session=self.session,
-                tm=transaction.manager,
                 content=content1,
         ):
             content1.description = 'TEST_CONTENT_DESCRIPTION_1_UPDATED'
@@ -41,7 +40,6 @@ class TestContent(StandardTest):
         content2 = self.test_create(key='2')
         with new_revision(
             session=self.session,
-            tm=transaction.manager,
             content=content2,
         ):
             content2.description = 'TEST_CONTENT_DESCRIPTION_2_UPDATED'
@@ -108,7 +106,6 @@ class TestContent(StandardTest):
 
         with new_revision(
                 session=self.session,
-                tm=transaction.manager,
                 content=content
         ):
             time.sleep(0.00001)
@@ -130,7 +127,6 @@ class TestContent(StandardTest):
 
         with new_revision(
                 session=self.session,
-                tm=transaction.manager,
                 content=content
         ):
             time.sleep(0.00001)

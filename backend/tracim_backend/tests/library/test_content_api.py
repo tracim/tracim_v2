@@ -688,7 +688,6 @@ class TestContentApi(DefaultTest):
         items = api.get_all(None, content_type_list.Any_SLUG, workspace)
         with new_revision(
                 session=self.session,
-                tm=transaction.manager,
                 content=items[0]
         ):
             api.delete(items[0])
@@ -798,7 +797,6 @@ class TestContentApi(DefaultTest):
         items = api.get_all(None, content_type_list.Any_SLUG, workspace)
         with new_revision(
                 session=self.session,
-                tm=transaction.manager,
                 content=items[0],
         ):
             api.archive(items[0])
@@ -1032,7 +1030,6 @@ class TestContentApi(DefaultTest):
         c = api.create(content_type_list.Folder.slug, workspace, None, 'parent', '', True)
         with new_revision(
             session=self.session,
-            tm=transaction.manager,
             content=c,
         ):
             with pytest.raises(ValueError):
@@ -1072,7 +1069,6 @@ class TestContentApi(DefaultTest):
         c = api.create(content_type_list.Folder.slug, workspace, None, 'parent', '', True)
         with new_revision(
             session=self.session,
-            tm=transaction.manager,
             content=c,
         ):
             for new_status in ['open', 'closed-validated', 'closed-unvalidated',
@@ -1954,7 +1950,6 @@ class TestContentApi(DefaultTest):
         content2 = api2.get_one(pcid, content_type_list.Any_SLUG, workspace)
         with new_revision(
            session=self.session,
-           tm=transaction.manager,
            content=content2,
         ):
             api2.update_content(
@@ -2090,7 +2085,6 @@ class TestContentApi(DefaultTest):
         with pytest.raises(ContentInNotEditableState):
             with new_revision(
                     session=self.session,
-                    tm=transaction.manager,
                     content=content2,
             ):
                     api2.update_content(
@@ -2211,7 +2205,6 @@ class TestContentApi(DefaultTest):
         with pytest.raises(ContentFilenameAlreadyUsedInFolder):
             with new_revision(
                     session=self.session,
-                    tm=transaction.manager,
                     content=content2,
             ):
                 api2.update_content(
@@ -2333,7 +2326,6 @@ class TestContentApi(DefaultTest):
         with pytest.raises(SameValueError):
             with new_revision(
                     session=self.session,
-                    tm=transaction.manager,
                     content=content2,
             ):
                 api2.update_content(
@@ -2416,7 +2408,6 @@ class TestContentApi(DefaultTest):
         content2_nb_rev = len(content2.revisions)
         with new_revision(
            session=self.session,
-           tm=transaction.manager,
            content=content2,
         ):
             with pytest.raises(SameValueError):
@@ -2531,7 +2522,6 @@ class TestContentApi(DefaultTest):
         content2 = api2.get_one(pcid, content_type_list.Any_SLUG, workspace)
         with new_revision(
             session=self.session,
-            tm=transaction.manager,
             content=content2,
         ):
             api2.update_file_data(
@@ -2664,7 +2654,6 @@ class TestContentApi(DefaultTest):
         with pytest.raises(ContentInNotEditableState):
             with new_revision(
                 session=self.session,
-                tm=transaction.manager,
                 content=content2,
             ):
                     api2.update_file_data(
@@ -2784,7 +2773,6 @@ class TestContentApi(DefaultTest):
         with pytest.raises(ContentInNotEditableState):
             with new_revision(
                 session=self.session,
-                tm=transaction.manager,
                 content=content2,
             ):
                     api2.update_file_data(
@@ -2904,7 +2892,6 @@ class TestContentApi(DefaultTest):
         with pytest.raises(ContentInNotEditableState):
             with new_revision(
                 session=self.session,
-                tm=transaction.manager,
                 content=content2,
             ):
                     api2.update_file_data(
@@ -2993,7 +2980,6 @@ class TestContentApi(DefaultTest):
         content2_nb_rev = len(content2.revisions)
         with new_revision(
             session=self.session,
-            tm=transaction.manager,
             content=content2,
         ):
             with pytest.raises(SameValueError):
@@ -3112,7 +3098,6 @@ class TestContentApi(DefaultTest):
         content2 = api2.get_one(pcid, content_type_list.Any_SLUG, workspace)
         with new_revision(
                 session=self.session,
-                tm=transaction.manager,
                 content=content2,
         ):
             api2.archive(content2)
@@ -3160,7 +3145,6 @@ class TestContentApi(DefaultTest):
         updated2 = api.get_one(pcid, content_type_list.Any_SLUG, workspace)
         with new_revision(
             session=self.session,
-            tm=transaction.manager,
             content=updated,
 
         ):
@@ -3270,7 +3254,6 @@ class TestContentApi(DefaultTest):
         content2 = api2.get_one(pcid, content_type_list.Any_SLUG, workspace)
         with new_revision(
                 session=self.session,
-                tm=transaction.manager,
                 content=content2,
         ):
             api2.delete(content2)
@@ -3319,7 +3302,6 @@ class TestContentApi(DefaultTest):
 
         updated2 = api.get_one(pcid, content_type_list.Any_SLUG, workspace)
         with new_revision(
-            tm=transaction.manager,
             session=self.session,
             content=updated2,
         ):
@@ -3378,7 +3360,6 @@ class TestContentApi(DefaultTest):
         secondly_created_but_not_updated = api.create(content_type_list.Page.slug, workspace, main_folder, 'another update_order_test', '', True)  # nopep8
         with new_revision(
             session=self.session,
-            tm=transaction.manager,
             content=firstly_created_but_recently_updated,
         ):
             firstly_created_but_recently_updated.description = 'Just an update'
@@ -3457,7 +3438,6 @@ class TestContentApi(DefaultTest):
         comment_deleted = api.create_comment(workspace, parent=deleted, content='just a comment', do_save=True)  # nopep8
         with new_revision(
             session=self.session,
-            tm=transaction.manager,
             content=archived,
         ):
             api.archive(archived)
@@ -3465,7 +3445,6 @@ class TestContentApi(DefaultTest):
 
         with new_revision(
             session=self.session,
-            tm=transaction.manager,
             content=deleted,
         ):
             api.delete(deleted)
@@ -3544,7 +3523,6 @@ class TestContentApi(DefaultTest):
         secondly_created_but_not_updated = api.create(content_type_list.Page.slug, workspace, main_folder, 'another update_order_test', '', True)  # nopep8
         with new_revision(
             session=self.session,
-            tm=transaction.manager,
             content=firstly_created_but_recently_updated,
         ):
             firstly_created_but_recently_updated.description = 'Just an update'
@@ -3609,7 +3587,6 @@ class TestContentApi(DefaultTest):
         secondly_created_but_not_updated = api.create(content_type_list.Page.slug, workspace, main_folder, 'another update_order_test', '', True)  # nopep8
         with new_revision(
             session=self.session,
-            tm=transaction.manager,
             content=firstly_created_but_recently_updated,
         ):
             firstly_created_but_recently_updated.description = 'Just an update'
@@ -3684,7 +3661,6 @@ class TestContentApi(DefaultTest):
         secondly_created_but_not_updated = api.create(content_type_list.Page.slug, workspace, main_folder, 'another update_order_test', '', True)  # nopep8
         with new_revision(
             session=self.session,
-            tm=transaction.manager,
             content=firstly_created_but_recently_updated,
         ):
             firstly_created_but_recently_updated.description = 'Just an update'
@@ -3765,7 +3741,6 @@ class TestContentApi(DefaultTest):
         secondly_created_but_not_updated = api.create(content_type_list.Page.slug, workspace, main_folder, 'another update_order_test', '', True)  # nopep8
         with new_revision(
             session=self.session,
-            tm=transaction.manager,
             content=firstly_created_but_recently_updated,
         ):
             firstly_created_but_recently_updated.description = 'Just an update'
@@ -3820,7 +3795,6 @@ class TestContentApi(DefaultTest):
 
         with new_revision(
             session=self.session,
-            tm=transaction.manager,
             content=p,
         ):
             p.description = 'This is some amazing test'
@@ -3875,7 +3849,6 @@ class TestContentApi(DefaultTest):
                        'this is dummy label content', '', True)
 
         with new_revision(
-            tm=transaction.manager,
             session=self.session,
             content=p,
         ):
@@ -3946,14 +3919,12 @@ class TestContentApi(DefaultTest):
 
         with new_revision(
             session=self.session,
-            tm=transaction.manager,
             content=p1,
         ):
             p1.description = 'This is some amazing test'
 
         with new_revision(
             session=self.session,
-            tm=transaction.manager,
             content=p2,
         ):
             p2.description = 'What\'s up?'
@@ -4022,13 +3993,11 @@ class TestContentApi(DefaultTest):
 
         with new_revision(
             session=self.session,
-            tm=transaction.manager,
             content=folder_1,
         ):
             api.delete(folder_1)
         with new_revision(
             session=self.session,
-            tm=transaction.manager,
             content=folder_2,
         ):
             api.archive(folder_2)

@@ -136,7 +136,6 @@ class CommentController(Controller):
         )
         with new_revision(
                 session=request.dbsession,
-                tm=transaction.manager,
                 content=comment
         ):
             api.delete(comment)
