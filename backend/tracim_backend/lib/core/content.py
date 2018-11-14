@@ -2,6 +2,7 @@
 import datetime
 import os
 import re
+import traceback
 import typing
 from contextlib import contextmanager
 
@@ -968,9 +969,22 @@ class ContentApi(object):
                 page=page_number,
                 file_ext=file_extension,
             )
+        except PageOfPreviewNotFound as exc:
+            # passthrough as this exception is already supported with
+            # specific error code.
+            raise exc
         except UnavailablePreviewType as exc:
             raise TracimUnavailablePreviewType() from exc
         except UnsupportedMimeType as exc:
+            raise UnavailablePreview(
+                'No preview available for content {}, revision {}'.format(content_id, revision_id)  # nopep8
+            ) from exc
+        except Exception as exc:
+            logger.warning(
+                self,
+                "Unknown Preview_Generator Exception Occured : {}".format(str(exc))
+            )
+            logger.warning(self, traceback.format_exc())
             raise UnavailablePreview(
                 'No preview available for content {}, revision {}'.format(content_id, revision_id)  # nopep8
             ) from exc
@@ -989,6 +1003,15 @@ class ContentApi(object):
         except UnavailablePreviewType as exc:
             raise TracimUnavailablePreviewType() from exc
         except UnsupportedMimeType as exc:
+            raise UnavailablePreview(
+                'No preview available for revision {}'.format(revision_id)
+            ) from exc
+        except Exception as exc:
+            logger.warning(
+                self,
+                "Unknown Preview_Generator Exception Occured : {}".format(str(exc))
+            )
+            logger.warning(self, traceback.format_exc())
             raise UnavailablePreview(
                 'No preview available for revision {}'.format(revision_id)
             ) from exc
@@ -1058,7 +1081,20 @@ class ContentApi(object):
                 height=height,
                 file_ext=file_extension,
             )
+        except (PreviewDimNotAllowed, PageOfPreviewNotFound) as exc:
+            # passthrough as those exceptions are already supported with
+            # specific error code.
+            raise exc
         except UnsupportedMimeType as exc:
+            raise UnavailablePreview(
+                'No preview available for content {}, revision {}'.format(content_id, revision_id)  # nopep8
+            ) from exc
+        except Exception as exc:
+            logger.warning(
+                self,
+                "Unknown Preview_Generator Exception Occured : {}".format(str(exc))
+            )
+            logger.warning(self, traceback.format_exc())
             raise UnavailablePreview(
                 'No preview available for content {}, revision {}'.format(content_id, revision_id)  # nopep8
             ) from exc
@@ -1636,29 +1672,48 @@ class ContentApi(object):
             )
         except UnsupportedMimeType:
             return None
+        except Exception as e:
+            logger.warning(
+                self,
+                "Unknown Preview_Generator Exception Occured : {}".format(str(e))
+            )
+            logger.warning(self, traceback.format_exc())
+            return None
         return nb_pages
 
     def has_pdf_preview(self, revision_id: int, file_extension: str) -> bool:
         file_path = self.get_one_revision_filepath(revision_id)
         try:
-            has_preview = self.preview_manager.has_pdf_preview(
+            return self.preview_manager.has_pdf_preview(
                 file_path,
                 file_ext=file_extension
             )
         except UnsupportedMimeType:
-            has_preview = False
-        return has_preview
+            return False
+        except Exception as e:
+            logger.warning(
+                self,
+                "Unknown Preview_Generator Exception Occured : {}".format(str(e))
+            )
+            logger.warning(self, traceback.format_exc())
+            return False
 
     def has_jpeg_preview(self, revision_id: int, file_extension: str) -> bool:
         file_path = self.get_one_revision_filepath(revision_id)
         try:
-            has_preview = self.preview_manager.has_jpeg_preview(
+            return self.preview_manager.has_jpeg_preview(
                 file_path,
                 file_ext=file_extension
             )
         except UnsupportedMimeType:
-            has_preview = False
-        return has_preview
+            return False
+        except Exception as e:
+            logger.warning(
+                self,
+                "Unknown Preview_Generator Exception Occured : {}".format(str(e))
+            )
+            logger.warning(self, traceback.format_exc())
+            return False
 
     def mark_read__all(
             self,
