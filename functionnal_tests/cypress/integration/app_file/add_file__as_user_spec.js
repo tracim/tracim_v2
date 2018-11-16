@@ -1,7 +1,7 @@
 const sharedSpaceManager = 'Shared space manager'
 const ROLE_WORKSPACE_CONTRIBUTOR = 'contributor'
 
-context('Known users as a workspace-manager', function () {
+context('Upload a file using drop zone', function () {
   beforeEach(function () {
     cy.resetDB()
     cy.setupBaseDB()
@@ -17,5 +17,9 @@ context('Known users as a workspace-manager', function () {
 
     cy.dropFixtureInDropZone('the_pdf.pdf', 'image/gif', '.filecontent__form')
     cy.get('[data-cy=createcontent__form__button]').click()
+    cy.wait(2000)
+    cy.get('.previewcomponent__dloption__icon').should('have.length', 3)
+    cy.contains('1 of 2')
+    cy.get('#dropdownMenu2').contains('Open')
   })
 })

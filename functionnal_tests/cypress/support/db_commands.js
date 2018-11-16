@@ -90,13 +90,13 @@ Cypress.Commands.add('setupBaseDB', () => {
 })
 
 Cypress.Commands.add('resetDB', () => {
-  // cy
-  //   .exec('tracimcli db delete --force -c ../backend/development.ini')
-  //   .then(cmd => cy.log(cmd.stdout))
-  //   .then(cmd => cy.exec('tracimcli db init -c ../backend/development.ini'))
-  //   .then(cmd => cy.log(cmd.stdout))
-  cy.exec('cp ../backend/tracim.sqlite.tmp ../backend/tracim.sqlite')
+  cy
+    .exec('tracimcli db delete --force -c ../backend/development.ini')
     .then(cmd => cy.log(cmd.stdout))
+    .then(cmd => cy.exec('tracimcli db init -c ../backend/development.ini'))
+    .then(cmd => cy.log(cmd.stdout))
+  // cy.exec('cp ../backend/tracim.sqlite.tmp ../backend/tracim.sqlite')
+  //   .then(cmd => cy.log(cmd.stdout))
 })
 
 Cypress.Commands.add('getUserByRole', (role) => {
