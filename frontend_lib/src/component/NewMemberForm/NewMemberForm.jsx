@@ -24,6 +24,7 @@ export const NewMemberForm = props => {
             type='text'
             className='name__input form-control'
             id='addmember'
+            data-cy='addmember'
             placeholder={props.t('Name or email')}
             value={props.nameOrEmail}
             onChange={e => props.onChangeNameOrEmail(e.target.value)}
@@ -44,7 +45,7 @@ export const NewMemberForm = props => {
                       <img src={u.avatar_url ? u.avatar_url : generateAvatarFromPublicName(u.public_name)} />
                     </div>
 
-                    <div className='autocomplete__item__name'>
+                    <div className='autocomplete__item__name' data-cy='autocomplete__item__name'>
                       {u.public_name}
                     </div>
                   </div>
@@ -59,7 +60,7 @@ export const NewMemberForm = props => {
                         <i className='fa fa-fw fa-user-plus' />
                       </div>
 
-                      <div className='autocomplete__item__name'>
+                      <div className='autocomplete__item__name' data-cy='autocomplete__item__name'>
                         {props.t('Send an invitational email to this user')}
                       </div>
                     </div>
@@ -73,7 +74,7 @@ export const NewMemberForm = props => {
                         <i className='fa fa-fw fa-user-secret' />
                       </div>
 
-                      <div className='autocomplete__item__name'>
+                      <div className='autocomplete__item__name' data-cy='autocomplete__item__name'>
                         <div className='autocomplete__item__name__unknownuser'>
                           {props.nameOrEmail}
                           <div className='autocomplete__item__name__unknownuser__msg'>

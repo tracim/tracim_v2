@@ -5,7 +5,7 @@ describe('content :: account', () => {
   })
 
   beforeEach(() => {
-    cy.login('users')
+    cy.loginAs('users')
     cy.visit('/ui/account')
   })
 

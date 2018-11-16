@@ -119,7 +119,7 @@ export class AdminUser extends React.Component {
           </div>
 
           <div className='adminUser__adduser'>
-            <button className='adminUser__adduser__button btn outlineTextBtn primaryColorBorder primaryColorBgHover primaryColorBorderDarkenHover' onClick={this.handleToggleAddUser}>
+            <button className='adminUser__adduser__button btn outlineTextBtn primaryColorBorder primaryColorBgHover primaryColorBorderDarkenHover' onClick={this.handleToggleAddUser} data-cy='adminUser__adduser__button'>
               {props.t('Create a user')}
             </button>
 
@@ -171,6 +171,7 @@ export class AdminUser extends React.Component {
                     <tr
                       className={classnames('adminUser__table__tr', {'user-deactivated': !u.is_active})}
                       key={u.user_id}
+                      data-cy='adminUser__table__tr'
                     >
                       <td>
                         <BtnSwitch

@@ -5,7 +5,7 @@ describe('logging in tracim', function () {
   })
 
   beforeEach(function () {
-    cy.login('users')
+    cy.loginAs('users')
     cy.visit('/ui')
   })
 

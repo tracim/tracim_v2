@@ -9,6 +9,7 @@ require('./ContentTypeBtn.styl')
 export const ContentTypeBtn = props =>
   <div
     className={classnames(`${props.customClass}`, 'contentTypeBtn')}
+    data-cy={`contentTypeBtn_${props.appSlug}`}
     style={{
       backgroundColor: props.hexcolor,
       ':hover': {
@@ -21,6 +22,7 @@ export const ContentTypeBtn = props =>
       <div className={classnames(`${props.customClass}__text__icon`)}>
         <i className={`fa fa-${props.faIcon}`} />
       </div>
+
       <div className={classnames(`${props.customClass}__text__title`)}>
         {props.creationLabel}
       </div>
@@ -35,7 +37,8 @@ ContentTypeBtn.propTypes = {
   faIcon: PropTypes.string.isRequired,
   creationLabel: PropTypes.string.isRequired,
   customClass: PropTypes.string,
-  onClickBtn: PropTypes.func
+  onClickBtn: PropTypes.func,
+  appSlug: PropTypes.string
 }
 
 ContentTypeBtn.defaultProps = {

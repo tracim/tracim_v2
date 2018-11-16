@@ -5,6 +5,7 @@ import { translate } from 'react-i18next'
 const NewVersionBtn = props => {
   return (
     <button
+      data-cy='wsContentGeneric__option__menu__addversion'
       className='wsContentGeneric__option__menu__addversion newversionbtn btn outlineTextBtn'
       onClick={props.onClickNewVersionBtn}
       disabled={props.disabled}

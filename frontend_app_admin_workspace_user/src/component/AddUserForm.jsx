@@ -43,7 +43,7 @@ export class AddUserForm extends React.Component {
     const { props, state } = this
 
     return (
-      <form className='adminUser__adduser__form'>
+      <form className='adminUser__adduser__form' data-cy='adminUser__adduser__form'>
         <div className='adminUser__adduser__form__username'>
           <label className='username__text' htmlFor='adduser_name'>
             {props.t('Name')}
@@ -56,6 +56,7 @@ export class AddUserForm extends React.Component {
             placeholder={props.t('Name')}
             value={state.newUserName}
             onChange={this.handleChangeNewUserName}
+            data-cy='adduser_name'
           />
 
           <label className='username__text' htmlFor='adduser_email'>
@@ -69,6 +70,7 @@ export class AddUserForm extends React.Component {
             placeholder={props.t('Email')}
             value={state.newUserEmail}
             onChange={this.handleChangeNewUserEmail}
+            data-cy='adduser_email'
           />
 
           {!props.emailNotifActivated && (
@@ -84,6 +86,7 @@ export class AddUserForm extends React.Component {
                 placeholder={props.t('Password')}
                 value={state.newUserPassword}
                 onChange={this.handleChangeNewUserPassword}
+                data-cy='adduser_password'
               />
             </div>
           )}
@@ -100,6 +103,7 @@ export class AddUserForm extends React.Component {
                 className='profile__list__item'
                 htmlFor={p.slug}
                 key={p.id}
+                data-cy={`profile__list__item__${p.slug}`}
               >
                 <input
                   type='radio'
@@ -125,6 +129,7 @@ export class AddUserForm extends React.Component {
             type='button'
             className='btn highlightBtn primaryColorBg primaryColorBorderDarkenHover primaryColorBgDarkenHover'
             onClick={this.handleClickAddUser}
+            data-cy='adminUser__adduser__form__submit'
           >
             {props.t('Create the user')}
             <i className='fa fa-fw fa-check' />
