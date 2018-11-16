@@ -39,6 +39,13 @@ export class AddUserForm extends React.Component {
     props.onClickAddUser(state.newUserName, state.newUserEmail, state.newUserProfile, state.newUserPassword)
   }
 
+  isValidateButtonDisabled = () => {
+    const { props, state } = this
+    return props.emailNotifActivated
+      ? [state.newUserName, state.newUserEmail, state.newUserProfile].some(i => i === '')
+      : [state.newUserName, state.newUserEmail, state.newUserPassword, state.newUserProfile].some(i => i === '')
+  }
+
   render () {
     const { props, state } = this
 
@@ -130,6 +137,7 @@ export class AddUserForm extends React.Component {
             className='btn highlightBtn primaryColorBg primaryColorBorderDarkenHover primaryColorBgDarkenHover'
             onClick={this.handleClickAddUser}
             data-cy='adminUser__adduser__form__submit'
+            disabled={this.isValidateButtonDisabled()}
           >
             {props.t('Create the user')}
             <i className='fa fa-fw fa-check' />
